@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "serverless offline",
+    "build": "tsc",
+    "deploy": "serverless deploy",
+    "remove": "serverless remove",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write .",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1692.0",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1",
+    "serverless": "^4.4.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.146",
+    "@types/aws-sdk": "^2.7.4",
+    "@types/node": "^22.10.1",
+    "@types/pg": "^8.11.10",
+    "@types/winston": "^2.4.4",
+    "serverless-offline": "^14.3.4"
+  }
+}

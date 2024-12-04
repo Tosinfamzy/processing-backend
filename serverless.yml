@@ -1,0 +1,33 @@
+service: passport-processor
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    S3_BUCKET: ${env:S3_BUCKET}
+    AWS_REGION: ${env:AWS_REGION}
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+
+functions:
+  uploadHandler:
+    handler: src/handlers/uploadHandler.uploadHandler
+    events:
+      - http:
+          path: upload
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    PassportImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: passport-images
+
+custom:
+  dotenv: true
+
+plugins:
+  - serverless-offline
