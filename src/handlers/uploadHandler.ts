@@ -26,6 +26,10 @@ export const uploadHandler = async (
 
     const extractedData = await extractPassportData(s3Key);
 
+    if (!extractedData.dateOfBirth || !extractedData.expiryDate) {
+      throw new Error("Missing date fields in data");
+    }
+
     await saveExtractedDataToDB({
       dateOfBirth: extractedData.dateOfBirth,
       expiryDate: extractedData.expiryDate,

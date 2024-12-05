@@ -35,7 +35,7 @@ export const extractPassportData = async (
       throw new Error("No blocks found in Textract response.");
     }
 
-    console.log(JSON.stringify(data, null, 2));
+    // console.log(JSON.stringify(data, null, 2));
 
     const blockMap = data.Blocks.reduce((map, block) => {
       if (block.Id) {
