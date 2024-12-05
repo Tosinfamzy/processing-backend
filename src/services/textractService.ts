@@ -11,7 +11,13 @@ const textract = new Textract({
 
 export const extractPassportData = async (
   s3Key: string
-): Promise<{ dateOfBirth: string; expiryDate: string }> => {
+): Promise<{
+  surname: string;
+  givenNames: string;
+  dateOfBirth: string;
+  expiryDate: string;
+  passportNumber: string;
+}> => {
   const params: Textract.Types.AnalyzeDocumentRequest = {
     Document: {
       S3Object: {
@@ -26,8 +32,10 @@ export const extractPassportData = async (
     const data = await textract.analyzeDocument(params).promise();
 
     if (!data.Blocks) {
-      throw new Error("No blocks found in the Textract response.");
+      throw new Error("No blocks found in Textract response.");
     }
+
+    console.log(JSON.stringify(data, null, 2));
 
     const blockMap = data.Blocks.reduce((map, block) => {
       if (block.Id) {
@@ -57,17 +65,27 @@ export const extractPassportData = async (
       }
     });
 
-    const dateOfBirth = keyValuePairs["Date of Birth"] || "";
-    const expiryDate = keyValuePairs["Expiry Date"] || "";
+    const surname = keyValuePairs["Surname/ Nom"] || "";
+    const givenNames = keyValuePairs["Given Names/ Prénoms"] || "";
+    const dateOfBirth = keyValuePairs["Date of birth/ Date du naissance"] || "";
+    const expiryDate =
+      keyValuePairs["Date of expiration/ Date d'expiration"] || "";
+    const passportNumber = keyValuePairs["Passport No./ No du Passeport"] || "";
 
-    if (!dateOfBirth || !expiryDate) {
+    if (
+      !surname ||
+      !givenNames ||
+      !dateOfBirth ||
+      !expiryDate ||
+      !passportNumber
+    ) {
       throw new Error("Required data not found in Textract response.");
     }
 
-    return { dateOfBirth, expiryDate };
+    return { surname, givenNames, dateOfBirth, expiryDate, passportNumber };
   } catch (error) {
     console.error("Error extracting passport data:", error);
-    throw { message: "Failed to extract data from Textract.", statusCode: 500 };
+    throw new Error("Failed to extract data from passport image.");
   }
 };
 

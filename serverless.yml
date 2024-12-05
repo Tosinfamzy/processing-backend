@@ -24,7 +24,7 @@ resources:
     PassportImagesBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: passport-images
+        BucketName: tosin-passport-images
 
 custom:
   dotenv: true
